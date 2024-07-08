@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Request } from '@nestjs/common';
+import { RegisterService } from './register.service';
 
 @Controller('/')
 export class RegisterController {
+  constructor(readonly registerUser: RegisterService) { }
   @Post('/')
-  async login(@Request() req, @Body() body) {
-    console.log(body);
-
-    return req.user;
+  async register(@Request() req, @Body() body) {
+    return this.registerUser.register(body);
   }
 }
