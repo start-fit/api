@@ -3,7 +3,6 @@ import { PrismaService } from 'prisma/lib/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
-
 @Injectable()
 export class LoginService {
   constructor(
@@ -23,6 +22,7 @@ export class LoginService {
 
     if (await bcrypt.compare(password + email, user.password)) {
       return {
+        date: new Date(),
         access_token: this.jwtService.sign({
           username: user.email,
           sub: user.id,

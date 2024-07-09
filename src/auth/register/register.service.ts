@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -6,18 +6,25 @@ import * as bcrypt from 'bcrypt';
 export class RegisterService {
   constructor(private prisma: PrismaClient) { }
   async register({ email, password }: { email: string; password: string }) {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(password + email, salt);
-    // const isMatch = await bcrypt.compare(password + email, hash);
+    try {
+      const salt = await bcrypt.genSalt(15);
+      const hash = await bcrypt.hash(password + email, salt);
 
-    const newUser = await this.prisma.users.create({
-      data: {
-        email,
-        password: hash
-      },
-    })
-    console.log(newUser);
-
+      const newUser = await this.prisma.users.create({
+        select: {
+          email: true
+        },
+        data: {
+          email,
+          password: hash
+        },
+      })
+      return {
+        newUser: newUser.email
+      }
+    } catch (error) {
+      throw new ConflictException()
+    }
   }
 }
 // {
