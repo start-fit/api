@@ -7,7 +7,6 @@ export class UserController {
   @Get('/')
   async login(@Req() req: Request) {
     console.log(req.user);
-
     return {
       status: 200
     };
