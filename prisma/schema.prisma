@@ -7,7 +7,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["nativeDistinct", "relationJoins"]
-  engineType      = "library"
+  engineType      = "binary"
 }
 
 datasource db {
