@@ -4,7 +4,7 @@ import { PrismaService } from 'prisma/lib/prisma.service';
 
 @Controller('user')
 export class UserController {
-  constructor(readonly prisma: PrismaService) { }
+  // constructor(readonly prisma: PrismaService) { }
   @Get('/')
   async updateUser(@Req() req: Request) {
 
