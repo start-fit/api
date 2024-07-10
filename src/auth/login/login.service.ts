@@ -24,7 +24,7 @@ export class LoginService {
       return {
         date: new Date(),
         access_token: this.jwtService.sign({
-          username: user.email,
+          email: user.email,
           sub: user.id,
         }, {
           secret: process.env.SECRETE_KEY,
