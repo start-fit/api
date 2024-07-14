@@ -1,0 +1,9 @@
+model historicoDeTrenio {
+  id              String   @id @unique @default(uuid())
+  usuarioTreinoId String
+  serie           Int
+  repeticao       Int
+  createdAt       DateTime @default(now())
+
+  idUsuarioTreino usuarioTreino @relation(fields: [usuarioTreinoId], references: [id])
+}

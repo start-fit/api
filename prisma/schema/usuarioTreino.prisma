@@ -1,0 +1,12 @@
+model usuarioTreino {
+  id         String    @id() @unique @default(uuid())
+  usersId    String
+  nomeTreino String
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime? @updatedAt()
+  deletedAt  DateTime?
+
+  idUsuario                 Users                       @relation(fields: [usersId], references: [id])
+  configuracaoTreinoUsuario configuracaoTreinoUsuario[]
+  historicoDeTrenio         historicoDeTrenio[]
+}

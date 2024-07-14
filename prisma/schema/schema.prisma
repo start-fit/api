@@ -6,20 +6,11 @@
 // https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["nativeDistinct", "relationJoins"]
+  previewFeatures = ["nativeDistinct", "relationJoins", "prismaSchemaFolder"]
   engineType      = "binary"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model Users {
-  id        String   @id() @unique @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
-  avatar    String?  @db.Text
-  createdAt DateTime @default(now())
 }

@@ -1,0 +1,11 @@
+model treino {
+  id            String    @id() @unique @default(uuid())
+  serie         Int
+  repeticao     Int
+  tutorialMedia String    @db.Text
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime? @updatedAt()
+  deletedAt     DateTime?
+
+  configuracaoTreinoUsuario configuracaoTreinoUsuario[]
+}

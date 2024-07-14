@@ -1,0 +1,20 @@
+enum Gender {
+  MASCULINO
+  FEMENINO
+}
+
+model Users {
+  id          String    @id() @unique @default(uuid())
+  email       String    @unique
+  nome        String?
+  senha       String
+  avatar      String?   @db.Text
+  genero      Gender?
+  aniversario DateTime?
+  altura      Int
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt()
+
+  avaliacaoFisica avaliacaoFisica[]
+  usuarioTreno    usuarioTreino[]
+}
