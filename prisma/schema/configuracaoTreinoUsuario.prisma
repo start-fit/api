@@ -1,0 +1,13 @@
+model configuracaoTreinoUsuario {
+  id              String    @id @unique @default(uuid())
+  usuarioTreinoId String
+  treinoId        String
+  repeticao       Int
+  serie           Int
+  createdAt       DateTime  @default(now())
+  updateAt        DateTime? @updatedAt()
+  deletedAt       DateTime?
+
+  idUsuarioTreino usuarioTreino @relation(fields: [usuarioTreinoId], references: [id])
+  idTreino        treino        @relation(fields: [treinoId], references: [id])
+}

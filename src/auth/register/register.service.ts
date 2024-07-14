@@ -16,7 +16,7 @@ export class RegisterService {
         },
         data: {
           email,
-          password: hash
+          senha: hash
         },
       })
       return {

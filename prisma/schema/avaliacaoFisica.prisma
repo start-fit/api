@@ -1,0 +1,12 @@
+model avaliacaoFisica {
+  id              String    @id() @unique @default(uuid())
+  userId          String
+  objetivo        String
+  caracteristicas Json
+  peso            Int
+  createdAt       DateTime  @default(now())
+  updateAt        DateTime? @updatedAt()
+  deletedAt       DateTime?
+
+  idUsuario Users @relation(fields: [userId], references: [id])
+}

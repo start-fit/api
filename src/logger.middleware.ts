@@ -1,6 +1,5 @@
 import { Injectable, NestMiddleware, Req, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UUID } from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 
 
@@ -9,7 +8,7 @@ import { Request, Response, NextFunction } from 'express';
 export class LoggerMiddleware implements NestMiddleware {
   constructor(private jwt: JwtService) { }
   async use(@Req() req: Request, res: Response, next: NextFunction) {
-    if (req.headers.authorization.includes("Bearer ")) {
+    if (req.headers.authorization?.includes("Bearer ")) {
       const token = req.headers.authorization;
       const sucsses = await this.jwt.verifyAsync(token.replace("Bearer ", ""), {
         secret: process.env.SECRETE_KEY,

@@ -13,14 +13,14 @@ export class LoginService {
   async login({ email, password }: { email: string; password: string }) {
     const user = await this.prisma.users.findUnique({
       select: {
-        password: true,
+        senha: true,
         id: true,
         email: true
       },
       where: { email },
     });
 
-    if (await bcrypt.compare(password + email, user.password)) {
+    if (await bcrypt.compare(password + email, user.senha)) {
       return {
         date: new Date(),
         access_token: this.jwtService.sign({
