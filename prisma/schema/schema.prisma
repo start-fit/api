@@ -6,7 +6,7 @@
 // https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["nativeDistinct", "relationJoins", "prismaSchemaFolder"]
+  previewFeatures = ["nativeDistinct", "relationJoins", "omitApi", "prismaSchemaFolder"]
   engineType      = "binary"
 }
 
