@@ -25,5 +25,8 @@ export class AppModule {
     consumer
       .apply(LoggerMiddleware)
       .forRoutes('treino');
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('categoria');
   }
 }
