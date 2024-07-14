@@ -1,0 +1,9 @@
+model categoriaTreino {
+  id        String    @id() @unique @default(uuid())
+  categoria String
+  descricao String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt()
+  deletedAt DateTime?
+  treino    treino[]
+}

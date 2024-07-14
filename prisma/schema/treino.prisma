@@ -1,11 +1,15 @@
 model treino {
   id            String    @id() @unique @default(uuid())
+  idCategoria   String
+  nomeTreino    String
   serie         Int
   repeticao     Int
+  descricao     String?   @db.Text
   tutorialMedia String    @db.Text
   createdAt     DateTime  @default(now())
   updateAt      DateTime? @updatedAt()
   deletedAt     DateTime?
 
   configuracaoTreinoUsuario configuracaoTreinoUsuario[]
+  categoriaTreinoId         categoriaTreino             @relation(fields: [idCategoria], references: [id])
 }
