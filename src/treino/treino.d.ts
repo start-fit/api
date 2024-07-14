@@ -4,8 +4,10 @@ type ListaCategoria = {
 
 type AdcionarTreinoUsuario = {
   nomeTreino: string;
-  treinoId: UUID;
   userId: UUID;
-  repeticao?: number;
-  serie?: number;
+  treinos: {
+    treinoId: UUID;
+    repeticao?: number;
+    serie?: number;
+  }[],
 }

@@ -18,32 +18,39 @@ export class TreinoService {
 
   async adcionarTreinousuario(dataTreino: AdcionarTreinoUsuario) {
     const result = await this.prisma.$transaction(async (trx) => {
-      let inforTreino: { repeticao: number, serie: number, id: string };
-      if (!dataTreino?.repeticao || !dataTreino?.serie) {
-        inforTreino = await trx.treino.findUnique({
-          select: {
-            id: true,
-            serie: true,
-            repeticao: true
-          },
-          where: { id: dataTreino.treinoId, }
-        })
-      }
+      const idTreinos = dataTreino.treinos.map(({ treinoId }) => treinoId)
+      const inforTreino = await trx.treino.findMany({
+        select: {
+          id: true,
+          serie: true,
+          repeticao: true
+        },
+        where: { id: { in: idTreinos }, }
+      });
+
+      const dataTreinos = dataTreino.treinos.reduce((acc, crr) => {
+        if (!crr?.repeticao || !crr?.serie) {
+          const defaultCfg = inforTreino.find(({ id }) => id === crr.treinoId);
+          return [...acc, {
+            ...crr,
+            serie: crr?.serie || defaultCfg.serie,
+            repeticao: crr?.repeticao || defaultCfg.repeticao
+          }];
+        }
+        return acc;
+      }, []);
 
       const configTreinoUsuario = await trx.usuarioTreino.create({
         data: {
           nomeTreino: dataTreino.nomeTreino,
           idUsuario: { connect: { id: dataTreino?.userId } },
           configuracaoTreinoUsuario: {
-            create: {
-              repeticao: dataTreino?.repeticao || inforTreino.repeticao,
-              serie: dataTreino?.serie || inforTreino.serie,
-              idTreino: { connect: { id: dataTreino?.treinoId || inforTreino.id } },
+            createMany: {
+              data: dataTreinos
             }
           }
         }
       });
-
       return configTreinoUsuario
     })
     return result;
