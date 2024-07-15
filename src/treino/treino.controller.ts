@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, HttpException, Http
 import { TreinoService } from './treino.service';
 import { Request } from 'express';
 import { UUID } from 'crypto';
+import type { AdcionarTreinoUsuario, AtualizarTreinoUsuario, ExcluirTreinoUsuario, ListaCategoria, MarcarTreinoRealizado } from './treino';
 
 @Controller('treino')
 export class TreinoController {
@@ -35,6 +36,15 @@ export class TreinoController {
     }
   }
 
+  @Post('/realizado')
+  async marcarTreinoUsuarioRealizadoController(@Req() req: Request, @Body() cadastroTreino: MarcarTreinoRealizado) {
+    const realizado = await this.treino.marcarTreinoUsuarioRelaizado(cadastroTreino);
+    return {
+      realizado,
+      status: 200
+    }
+  }
+
   @Post('/usuario')
   async adcionarTreinousuarioController(@Req() req: Request, @Body() cadastroTreino: AdcionarTreinoUsuario) {
     try {
@@ -57,8 +67,7 @@ export class TreinoController {
   }
 
   @Put('/usuario')
-  async atualizarTreinousuarioController(@Req() req: Request,
-    @Body() atualizarTreino: AtualizarTreinoUsuario) {
+  async atualizarTreinousuarioController(@Req() req: Request, @Body() atualizarTreino: AtualizarTreinoUsuario) {
     try {
       const treinoAtualizado = await this.treino.atulizarTreinoUsuario({
         userId: req.user?.['sub'],

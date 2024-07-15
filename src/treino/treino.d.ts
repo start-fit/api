@@ -1,3 +1,5 @@
+import { UUID } from "crypto";
+
 type ListaCategoria = {
   idCategoria: UUID
 }
@@ -21,5 +23,11 @@ type AtualizarTreinoUsuario = {
 
 type ExcluirTreinoUsuario = {
   userId: UUID;
+  configTreinoId: UUID;
+}
+
+type MarcarTreinoRealizado = {
+  repeticao: number;
+  serie: number;
   configTreinoId: UUID;
 }

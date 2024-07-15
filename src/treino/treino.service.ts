@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { PrismaService } from 'prisma/lib/prisma.service';
+import { AdcionarTreinoUsuario, AtualizarTreinoUsuario, ExcluirTreinoUsuario, MarcarTreinoRealizado } from './treino';
 
 @Injectable()
 export class TreinoService {
@@ -17,7 +18,27 @@ export class TreinoService {
     return result;
   }
 
+  async marcarTreinoUsuarioRelaizado(data: MarcarTreinoRealizado) {
+    const result = await this.prisma.historicoDeTrenio.create({
+      data: {
+        repeticao: data.repeticao,
+        serie: data.serie,
+        configuracaoTreinoUsuario: {
+          connect: {
+            id: data.configTreinoId
+          }
+        }
+      }
+    });
+    return result;
+  }
+
   async listarTrenioUsuario(data: { idUsuario: UUID, idTreino: UUID }) {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
     const result = await this.prisma.usuarioTreino.findMany({
       select: {
         id: true,
@@ -27,11 +48,22 @@ export class TreinoService {
             id: true,
             serie: true,
             repeticao: true,
+            historicoDeTrenio: {
+              select: { serie: true, repeticao: true, createdAt: true },
+              take: 1,
+              orderBy: { createdAt: 'desc' },
+              where: {
+                createdAt: {
+                  gte: todayStart,
+                  lte: todayEnd,
+                }
+              }
+            },
             idTreino: {
               select: {
                 serie: true,
                 repeticao: true,
-                tutorialMedia: true
+                tutorialMedia: true,
               }
             }
           }

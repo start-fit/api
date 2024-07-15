@@ -8,6 +8,7 @@ model configuracaoTreinoUsuario {
   updateAt        DateTime? @updatedAt()
   deletedAt       DateTime?
 
-  idUsuarioTreino usuarioTreino @relation(fields: [usuarioTreinoId], references: [id])
-  idTreino        treino        @relation(fields: [treinoId], references: [id])
+  idUsuarioTreino   usuarioTreino       @relation(fields: [usuarioTreinoId], references: [id])
+  idTreino          treino              @relation(fields: [treinoId], references: [id])
+  historicoDeTrenio historicoDeTrenio[]
 }
