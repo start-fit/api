@@ -8,4 +8,5 @@ import { TreinoService } from './treino.service';
   controllers: [TreinoController],
   exports: [PrismaService]
 })
+
 export class TreinoModule { }
