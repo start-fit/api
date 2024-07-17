@@ -7,5 +7,6 @@ import { PrismaService } from 'prisma/lib/prisma.service';
 @Module({
   providers: [LoginService, PrismaService, JwtService],
   controllers: [LoginController],
+  exports: [LoginService]
 })
 export class LoginModule { }

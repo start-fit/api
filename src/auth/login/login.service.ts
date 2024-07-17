@@ -21,8 +21,10 @@ export class LoginService {
     });
 
     if (await bcrypt.compare(password + email, user.senha)) {
+      delete user.senha;
       return {
         date: new Date(),
+        user,
         access_token: this.jwtService.sign({
           email: user.email,
           sub: user.id,
