@@ -21,7 +21,6 @@ export class RegisterService {
           senha: hash
         },
       })
-
       return await this.loginUser.login({ email: newUser.email, password });;
     } catch (error) {
       console.log(error);
@@ -29,11 +28,3 @@ export class RegisterService {
     }
   }
 }
-// {
-//   id: 'abca7f85-3eb6-4ddb-a25b-d10603eda2b3',
-//   email: 'email@email.com',
-//   name: null,
-//   password: '$2b$10$Xw7zCiTEodCwm1Wf01rcIubMqDL85qeXEaJnMiywWQGmkEGO/aKRq',
-//   avatar: null,
-//   createdAt: 2024-07-08T23:22:50.253Z
-// }
