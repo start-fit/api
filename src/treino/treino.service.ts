@@ -96,7 +96,8 @@ export class TreinoService {
 
   async adcionarTreinousuario(dataTreino: AdcionarTreinoUsuario) {
     return await this.prisma.$transaction(async (trx) => {
-      const idTreinos = dataTreino.treinos.map(({ treinoId }) => treinoId)
+      const idTreinos = dataTreino.treinos.map(({ treinoId }) => treinoId);
+
       const inforTreino = await trx.treino.findMany({
         select: {
           id: true,
@@ -111,12 +112,17 @@ export class TreinoService {
           const defaultCfg = inforTreino.find(({ id }) => id === crr.treinoId);
           return [...acc, {
             ...crr,
-            serie: crr?.serie || defaultCfg.serie,
-            repeticao: crr?.repeticao || defaultCfg.repeticao
+            serie: Number(crr?.serie || defaultCfg.serie),
+            repeticao: Number(crr?.repeticao || defaultCfg.repeticao)
           }];
         }
-        return acc;
+        return [...acc, {
+          ...crr,
+          serie: Number(crr?.serie),
+          repeticao: Number(crr?.repeticao)
+        }];
       }, []);
+
       const configTreinoUsuario = await trx.usuarioTreino.create({
         data: {
           nomeTreino: dataTreino.nomeTreino,
@@ -128,6 +134,7 @@ export class TreinoService {
           }
         }
       });
+
       return configTreinoUsuario
     })
   }
