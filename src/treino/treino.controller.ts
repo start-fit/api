@@ -11,7 +11,6 @@ export class TreinoController {
   @Get()
   async listarTreinosCategoriaController(@Query() { idCategoria }: ListaCategoria) {
     if (!idCategoria) throw new BadRequestException('idCategoria is required');
-
     const treinos = await this.treino.listarTrenioCategoria(idCategoria);
     return {
       treinos,
@@ -20,12 +19,14 @@ export class TreinoController {
   }
 
   @Get('/usuario')
-  async listarTreinosUsuarioController(@Req() req: Request, @Query() { idTreino }: { idTreino: UUID }) {
+  async listarTreinosUsuarioController(@Req() req: Request,
+    @Query() { idTreino, idCategoria }: { idTreino: UUID, idCategoria: UUID }) {
     let treinos = [];
     if (idTreino) {
       treinos = await this.treino.listarTrenioUsuario({
         idUsuario: req.user['sub'],
-        idTreino
+        idTreino,
+        idCategoria
       });
     } else {
       treinos = await this.treino.listarTreniosUsuario(req.user['sub']);
