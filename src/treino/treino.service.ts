@@ -19,7 +19,7 @@ export class TreinoService {
   }
 
   async marcarTreinoUsuarioRelaizado(data: MarcarTreinoRealizado) {
-    const result = await this.prisma.historicoDeTrenio.create({
+    return await this.prisma.historicoDeTrenio.create({
       data: {
         repeticao: data.repeticao,
         serie: data.serie,
@@ -30,52 +30,37 @@ export class TreinoService {
         }
       }
     });
-    return result;
   }
 
-  async listarTrenioUsuario(data: { idUsuario: UUID, idTreino: UUID }) {
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59, 999);
-
-    const result = await this.prisma.usuarioTreino.findMany({
+  async listarTrenioUsuario(data: { idUsuario: UUID, idTreino: UUID, idCategoria: UUID }) {
+    return await this.prisma.treino.findMany({
       select: {
         id: true,
+        serie: true,
+        repeticao: true,
+        tutorialMedia: true,
         nomeTreino: true,
         configuracaoTreinoUsuario: {
           select: {
-            id: true,
             serie: true,
             repeticao: true,
-            historicoDeTrenio: {
-              select: { serie: true, repeticao: true, createdAt: true },
-              take: 1,
-              orderBy: { createdAt: 'desc' },
-              where: {
-                createdAt: {
-                  gte: todayStart,
-                  lte: todayEnd,
-                }
-              }
+            treinoId: true,
+          },
+          where: {
+            idUsuarioTreino: {
+              usersId: data.idUsuario,
+              id: data.idTreino
             },
-            idTreino: {
-              select: {
-                serie: true,
-                repeticao: true,
-                tutorialMedia: true,
-              }
-            }
-          }
+            deletedAt: null
+          },
+          take: 1
         }
       },
       where: {
-        usersId: data.idUsuario,
-        id: data.idTreino
+        categoriaTreinoId: { id: data.idCategoria },
+        idCategoria: data.idCategoria
       }
     });
-
-    return result;
   }
 
   async listarTreniosUsuario(idUsuario: UUID) {

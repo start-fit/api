@@ -8,7 +8,10 @@ export class CategoriaService {
 
   async listarCategoraisServie() {
     return await this.prisma.categoriaTreino.findMany({
-      omit: { deletedAt: true, updateAt: true }
+      omit: { deletedAt: true, updateAt: true },
+      orderBy: {
+        treino: { _count: 'asc' }
+      }
     });
   }
 }
