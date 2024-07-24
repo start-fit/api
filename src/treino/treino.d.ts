@@ -16,9 +16,12 @@ type AdcionarTreinoUsuario = {
 
 type AtualizarTreinoUsuario = {
   userId: UUID;
-  configTreinoId: UUID;
-  repeticao: number;
-  serie: number;
+  treinos: {
+    id: UUID;
+    treinoId: UUID;
+    repeticao: number;
+    serie: number;
+  }[];
 }
 
 type ExcluirTreinoUsuario = {

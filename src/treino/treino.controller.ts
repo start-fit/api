@@ -72,7 +72,7 @@ export class TreinoController {
     try {
       const treinoAtualizado = await this.treino.atulizarTreinoUsuario({
         userId: req.user?.['sub'],
-        ...atualizarTreino
+        ...atualizarTreino,
       });
       return {
         ...treinoAtualizado,
