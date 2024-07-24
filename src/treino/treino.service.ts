@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { PrismaService } from 'prisma/lib/prisma.service';
 import { AdcionarTreinoUsuario, AtualizarTreinoUsuario, ExcluirTreinoUsuario, MarcarTreinoRealizado } from './treino';
+import { configuracaoTreinoUsuario, Prisma } from '@prisma/client';
 
 @Injectable()
 export class TreinoService {
@@ -42,6 +43,7 @@ export class TreinoService {
         nomeTreino: true,
         configuracaoTreinoUsuario: {
           select: {
+            id: true,
             serie: true,
             repeticao: true,
             treinoId: true,
@@ -125,18 +127,31 @@ export class TreinoService {
   }
 
   async atulizarTreinoUsuario(data: AtualizarTreinoUsuario) {
-    return await this.prisma.configuracaoTreinoUsuario.update({
-      data: {
-        serie: data.serie,
-        repeticao: data.repeticao
-      },
-      select: { id: true },
-      where: {
-        id: data.configTreinoId,
-        deletedAt: null,
-        idUsuarioTreino: { usersId: data.userId }
-      }
-    })
+    const listaUpdates: Prisma.PrismaPromise<configuracaoTreinoUsuario>[] = [];
+    data.treinos.forEach((treino) => {
+      listaUpdates.push(this.prisma.configuracaoTreinoUsuario.upsert({
+        update: {
+          serie: treino.serie,
+          repeticao: treino.repeticao,
+        },
+        create: {
+          serie: treino.serie,
+          repeticao: treino.repeticao,
+          idTreino: { connect: { id: treino.treinoId } },
+          idUsuarioTreino: {
+            connect: {
+              id: treino.id
+            }
+          }
+        },
+        where: {
+          id: treino.id,
+          treinoId: treino.treinoId,
+        }
+      }));
+    });
+    await this.prisma.$transaction(listaUpdates);
+    return {};
   }
 
   async excluirTreinoUsuario(data: ExcluirTreinoUsuario) {
