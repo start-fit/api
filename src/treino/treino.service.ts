@@ -71,7 +71,11 @@ export class TreinoService {
         id: true,
         nomeTreino: true,
         _count: {
-          select: { configuracaoTreinoUsuario: true }
+          select: {
+            configuracaoTreinoUsuario: {
+              where: { deletedAt: null }
+            }
+          }
         }
       },
       where: {
@@ -133,6 +137,7 @@ export class TreinoService {
         update: {
           serie: treino.serie,
           repeticao: treino.repeticao,
+          deletedAt: treino.delete ? new Date() : null
         },
         create: {
           serie: treino.serie,
