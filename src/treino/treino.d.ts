@@ -21,6 +21,7 @@ type AtualizarTreinoUsuario = {
     treinoId: UUID;
     repeticao: number;
     serie: number;
+    delete: boolean;
   }[];
 }
 
