@@ -108,4 +108,25 @@ export class TreinoController {
       });
     }
   }
+
+  @Get('/start')
+  async iniciarTreinoHome(@Req() req: Request, @Query() { idTreinoUsuario }) {
+    try {
+      const inicioTreino = await this.treino.inciarTreinoHome({
+        userId: req.user?.['sub'],
+        idTreinoUsuario
+      });
+      return {
+        ...inicioTreino,
+        status: 200
+      }
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'Not Exists',
+      }, HttpStatus.BAD_REQUEST, {
+        cause: error
+      });
+    }
+  }
 }
