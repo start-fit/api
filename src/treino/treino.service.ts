@@ -172,4 +172,36 @@ export class TreinoService {
       }
     })
   }
+
+  async inciarTreinoHome(data: { userId: UUID, idTreinoUsuario: UUID }) {
+    const result = await this.prisma.usuarioTreino.findFirst({
+      select: {
+        id: true,
+        nomeTreino: true,
+        configuracaoTreinoUsuario: {
+          select: {
+            idTreino: {
+              select: {
+                id: true,
+                nomeTreino: true,
+                tutorialMedia: true
+              }
+            }
+          }
+        }
+      },
+      where: {
+        idUsuario: { id: data.userId },
+        OR: [{
+          id: { contains: data.idTreinoUsuario }
+        }],
+        deletedAt: null,
+      }
+    })
+    return {
+      ...result,
+      configuracaoTreinoUsuario: undefined,
+      treinos: result.configuracaoTreinoUsuario.map(({ idTreino }) => idTreino)
+    }
+  }
 }
